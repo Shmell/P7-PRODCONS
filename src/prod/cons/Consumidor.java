@@ -1,28 +1,32 @@
+package prod.cons;
+
+import java.util.Random;
+
+
+
+
 public class Consumidor implements Runnable
 {
+    private final Random aleatorio;
     private final Contenedor contenedor;
     private final int idconsumidor;
- 
-    /**
-     * Constructor de la clase
-     * @param contenedor Contenedor común a los consumidores y el productor
-     * @param idconsumidor Identificador del consumidor
-     */
+
+   
     public Consumidor(Contenedor contenedor, int idconsumidor) 
     {
         this.contenedor = contenedor;
         this.idconsumidor = idconsumidor;
+        aleatorio = new Random();
     }
- 
-    @Override
-    /**
-     * Implementación de la hebra
-     */
+
+    
     public void run() 
     {
         while(Boolean.TRUE)
         {
-            System.out.println("El consumidor " + idconsumidor + " consume: " + contenedor.get());
+            int quitar = aleatorio.nextInt(50);
+            System.out.println("El consumidor " + idconsumidor + " consume: " + contenedor.get(quitar));
+             System.out.println("CONTENEDOR TIENE: "+Contenedor.contenido);
         }
     }
 }

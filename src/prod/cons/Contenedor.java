@@ -1,17 +1,21 @@
+package prod.cons;
+
+
+
+
 public class Contenedor 
 {
-    private int contenido;
+    static int contenido;
     private boolean contenedorlleno = Boolean.FALSE;
+
  
-    /**
-     * Obtiene de forma concurrente o síncrona el elemento que hay en el contenedor
-     * @return Contenido el contenedor
-     */
-    public synchronized int get()
+    public synchronized int get(int value)
     {
-        while (!contenedorlleno)
+        int faltante;
+        
+        while (!contenedorlleno || (contenido <= 0))
         {
-            try
+            try 
             {
                 wait();
             } 
@@ -20,20 +24,35 @@ public class Contenedor
                 System.err.println("Contenedor: Error en get -> " + e.getMessage());
             }
         }
-        contenedorlleno = Boolean.FALSE;
+        
+         contenido = contenido-value;
+         
+         if(contenido < 0)
+            {
+             contenedorlleno = Boolean.FALSE;
+              faltante=contenido;
+              value=value+faltante;
+              contenido=0;
+            
+            }
+        else
+            contenedorlleno = Boolean.FALSE;
+        
         notify();
-        return contenido;
+        
+        
+        
+        return value;
     }
- 
-    /**
-     * Introduce de forma concurrente o síncrona un elemento en el contenedor
-     * @param value Elemento a introducir en el contenedor
-     */
-    public synchronized void put(int value) 
+
+    
+    public synchronized void put(int value,int idProductor) 
     {
-        while (contenedorlleno) 
+        int sobrante;
+        
+        while (contenedorlleno && (contenido >200)) 
         {
-            try
+            try 
             {
                 wait();
             } 
@@ -42,8 +61,29 @@ public class Contenedor
                 System.err.println("Contenedor: Error en put -> " + e.getMessage());
             }
         }
-        contenido = value;
-        contenedorlleno = Boolean.TRUE;
+        
+        contenido = contenido+value;
+        
+        if(contenido > 200)
+            {
+             contenedorlleno = Boolean.TRUE;
+              sobrante=contenido-200;
+              value=value-sobrante;
+              contenido=200;
+            
+            }
+        else
+           contenedorlleno = Boolean.TRUE;
+        
+        System.out.println("\nEl productor " +(idProductor)+ " pone: " + value);
+        System.out.println("CONTENEDOR TIENE: "+Contenedor.contenido);
+        
+       
+        
+        
+        
+        
+        
         notify();
     }
 }
