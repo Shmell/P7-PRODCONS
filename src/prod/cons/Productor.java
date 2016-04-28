@@ -12,7 +12,7 @@ public class Productor implements Runnable
     private final Random aleatorio;
     private final Contenedor contenedor;
     private final int idproductor;
-    private final int TIEMPOESPERA = 7000;
+    private final int TIEMPOESPERA = 2000;
 
    
     public Productor(Contenedor contenedor, int idproductor) 
@@ -27,7 +27,7 @@ public class Productor implements Runnable
     {
         while(Boolean.TRUE)
         {
-            int poner = aleatorio.nextInt(50);
+            int poner = aleatorio.nextInt(75);
             contenedor.put(poner,idproductor);
             
            
